@@ -1,5 +1,8 @@
+from django.db.models import *
 from .models import Product
 import pprint
+
+pp = pprint.PrettyPrinter(indent=2, depth=3)
 
 class ProductCrud:
     @classmethod
@@ -28,58 +31,70 @@ class ProductCrud:
         return data
     
     @classmethod
-    def by_rating_and_color(cls):
-        
-        pass
+    def by_rating_and_color(cls, rating, color):
+        data = Product.objects.filter(Q(rating=rating) & Q(color=color))
+        return data
     
     @classmethod
-    def by_rating_or_color(cls):
-        pass
+    def by_rating_or_color(cls, rating, color):
+        data = Product.objects.filter(Q(rating=rating) | Q(color=color))
+        return data
     
     @classmethod
     def no_color_count(cls):
-        pass
+        data = Product.objects.filter(color=None).count()
+        return data
     
     @classmethod
-    def below_price_or_above_rating(cls):
-        pass
+    def below_price_or_above_rating(cls, price, rating):
+        data = Product.objects.filter(Q(price_cents__lt=price) | Q(rating__gt=rating))
+        return data
     
     @classmethod
-    def ordered_by_category_alphabetical_order_and_then_price_descending(cls):
-        pass
+    def ordered_by_category_alphabetical_order_and_then_price_decending(cls):
+        data = Product.objects.order_by('category', F('price_cents').desc())
+        return data
     
     @classmethod
-    def products_by_manufacturer_with_name_like(cls):
-        pass
+    def products_by_manufacturer_with_name_like(cls, manufacturer):
+        data = Product.objects.filter(manufacturer__contains=manufacturer)
+        return data
     
     @classmethod
-    def manufacturer_names_for_query(cls):
-        pass
+    def manufacturer_names_for_query(cls, manufacturer):
+        data = Product.objects.filter(manufacturer__contains=manufacturer).values_list('manufacturer', flat=True)
+        return data
     
     @classmethod
-    def not_in_a_category(cls):
-        pass
+    def not_in_a_category(cls, category):
+        data = Product.objects.exclude(category=category)
+        return data
     
     @classmethod
-    def limited_not_in_a_category(cls):
-        pass
+    def limited_not_in_a_category(cls, category, limit):
+        data = Product.objects.exclude(category=category)[:3]
+        return data
     
     @classmethod
-    def category_manufacturers(cls):
-        pass
+    def category_manufacturers(cls, category):
+        data = Product.objects.filter(category=category).values_list('manufacturer', flat=True)
+        return data
     
     @classmethod
-    def average_category_rating(cls):
-        pass
+    def average_category_rating(cls, category):
+        data = Product.objects.filter(category=category).aggregate(Avg('rating'))
+        return data
     
     @classmethod
     def greatest_price(cls):
-        pass
+        data = Product.objects.all().aggregate(Max('price_cents'))
+        return data
     
     @classmethod
     def longest_model_name(cls):
-        pass
+        data = Product.objects.annotate(length=len(F('model'))).aggregate(Max(length))
+        return data
     
     @classmethod
     def ordered_by_model_length(cls):
-        pass
+        return

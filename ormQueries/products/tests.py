@@ -38,11 +38,11 @@ class ProductCrudTestCase(TestCase):
     #     product_ids = get_query_ids(product_crud)
     #     self.assertEquals(product_ids, [14, 15, 16, 18, 21])
 
-    def test_06_by_rating_and_color(self):
-        """finds products by rating & color value"""
-        product_crud = ProductCrud.by_rating_and_color(3.5, 'maroon')
-        product_ids = get_query_ids(product_crud)
-        self.assertEquals(product_ids, [7])
+    # def test_06_by_rating_and_color(self):
+    #     """finds products by rating & color value"""
+    #     product_crud = ProductCrud.by_rating_and_color(3.5, 'maroon')
+    #     product_ids = get_query_ids(product_crud)
+    #     self.assertEquals(product_ids, [7])
 
     # def test_07_by_rating_or_color(self):
     #     """finds products by a rating or color value"""
@@ -104,10 +104,10 @@ class ProductCrudTestCase(TestCase):
     #     product_crud = ProductCrud.greatest_price()
     #     self.assertEquals(product_crud['price_cents__max'], 9758)
 
-    # def test_18_longest_model_name(self):
-    #     """returns the id of the product with the longest model name"""
-    #     product_crud = ProductCrud.longest_model_name()
-    #     self.assertEquals(product_crud, 25)
+    def test_18_longest_model_name(self):
+        """returns the id of the product with the longest model name"""
+        product_crud = ProductCrud.longest_model_name()
+        self.assertEquals(product_crud, 25)
 
     # def test_19_ordered_by_model_length(self):
     #     """returns products ordered by the length of their model name"""
