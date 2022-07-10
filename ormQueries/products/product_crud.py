@@ -1,8 +1,6 @@
+from django.db.models.functions import Length
 from django.db.models import *
 from .models import Product
-import pprint
-
-pp = pprint.PrettyPrinter(indent=2, depth=3)
 
 class ProductCrud:
     @classmethod
@@ -72,7 +70,7 @@ class ProductCrud:
     
     @classmethod
     def limited_not_in_a_category(cls, category, limit):
-        data = Product.objects.exclude(category=category)[:3]
+        data = Product.objects.exclude(category=category)[:limit]
         return data
     
     @classmethod
@@ -92,9 +90,10 @@ class ProductCrud:
     
     @classmethod
     def longest_model_name(cls):
-        data = Product.objects.annotate(length=len(F('model'))).aggregate(Max(length))
+        data = Product.objects.annotate(length=Length('model')).order_by(F('length').desc())[0].pk
         return data
     
     @classmethod
     def ordered_by_model_length(cls):
-        return
+        data = Product.objects.annotate(length=Length('model')).order_by('length').values_list('pk', flat=True)
+        return data
